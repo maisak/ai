@@ -28,4 +28,10 @@
       <ProjectReference Include="..\Chat\Chat.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="appsettings.sandbox.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
 </Project>

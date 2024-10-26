@@ -7,7 +7,7 @@ public static class Configuration
 	public static IConfiguration InitConfiguration()
 	{
 		var config = new ConfigurationBuilder()
-			.AddJsonFile("appsettings.playground.json")
+			.AddJsonFile("appsettings.sandbox.json")
 			.Build();
 		return config;
 	}

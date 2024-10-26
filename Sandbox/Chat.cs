@@ -6,8 +6,9 @@ namespace Sandbox;
 public class Chat : SandboxBase
 {
 	[Fact]
-	public void BaseChat()
+	public async Task BaseChat()
 	{
 		var chat = ServiceProvider.GetRequiredService<ChatService>();
+		await chat.ChatWithParametersAsync();
 	}
 }
