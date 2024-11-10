@@ -1,4 +1,5 @@
 ﻿using Chat;
+using Language;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -27,6 +28,7 @@ public class SandboxBase
 						.AddDebug());
 		
 		serviceCollection.AddChatServices(_config);
+		serviceCollection.AddLanguageServices(_config);
 
 		return serviceCollection.BuildServiceProvider();
 	}
