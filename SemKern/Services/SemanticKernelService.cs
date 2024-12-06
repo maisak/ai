@@ -7,7 +7,7 @@ using SemKern.Config;
 using SemKern.Plugins;
 using System.Text;
 
-namespace SemKern;
+namespace SemKern.Services;
 
 public class SemanticKernelService
 {
