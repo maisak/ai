@@ -27,6 +27,7 @@
     <ItemGroup>
       <ProjectReference Include="..\Chat\Chat.csproj" />
       <ProjectReference Include="..\Language\Language.csproj" />
+      <ProjectReference Include="..\SemKern\SemKern.csproj" />
     </ItemGroup>
 
     <ItemGroup>
