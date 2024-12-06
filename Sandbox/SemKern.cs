@@ -11,4 +11,11 @@ public class SemKern : SandboxBase
 		var chat = ServiceProvider.GetRequiredService<SemanticKernelService>();
 		await chat.Chat("turn on the lights");
 	}
+	
+	[Fact]
+	public async Task StreamingChat()
+	{
+		var chat = ServiceProvider.GetRequiredService<SemanticKernelService>();
+		await chat.SteamingChat("give me a short description of Megadeth music");
+	}
 }

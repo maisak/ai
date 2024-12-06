@@ -5,6 +5,7 @@ using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using SemKern.Config;
 using SemKern.Plugins;
+using System.Text;
 
 namespace SemKern;
 
@@ -56,5 +57,27 @@ public class SemanticKernelService
 		_history.AddMessage(result.Role, result.Content ?? string.Empty);
 
 		return result.Content ?? string.Empty;
+	}
+	
+	public async Task<string> SteamingChat(string prompt)
+	{
+		// Add user input
+		_history.AddUserMessage(prompt);
+
+		// Get the response from the AI
+		var result = _chatCompletionService.GetStreamingChatMessageContentsAsync(
+			_history,
+			executionSettings: _openAiPromptExecutionSettings,
+			kernel: _kernel);
+
+		var sb = new StringBuilder();
+		// Print the results
+		await foreach (var chunk in result)
+		{
+			sb.Append(chunk);
+			Console.Write(chunk);
+		}
+
+		return sb.ToString();
 	}
 }
