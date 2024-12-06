@@ -80,4 +80,17 @@ public class SemanticKernelService
 
 		return sb.ToString();
 	}
+
+	public async Task<string> ImageDescription(byte[] bytes)
+	{
+		_history.AddUserMessage([
+			new TextContent("What is in this image?"),
+			new ImageContent(bytes, "image/jpeg")
+		]);
+		
+		var reply = await _chatCompletionService.GetChatMessageContentAsync(_history);
+		Console.WriteLine(reply.Content);
+		
+		return reply.Content ?? string.Empty;
+	}
 }

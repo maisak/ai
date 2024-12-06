@@ -18,4 +18,12 @@ public class SemKern : SandboxBase
 		var chat = ServiceProvider.GetRequiredService<SemanticKernelService>();
 		await chat.SteamingChat("give me a short description of Megadeth music");
 	}
+	
+	[Fact]
+	public async Task ImageDescription()
+	{
+		var chat = ServiceProvider.GetRequiredService<SemanticKernelService>();
+		var bytes = await File.ReadAllBytesAsync("Files/Images/megadeth.png");
+		await chat.ImageDescription(bytes);
+	}
 }
