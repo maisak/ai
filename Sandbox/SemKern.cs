@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using SemKern;
 using SemKern.Services;
 
 namespace Sandbox;
@@ -38,5 +37,12 @@ public class SemKern : SandboxBase
 		var chat = ServiceProvider.GetRequiredService<SemKernelWithAppInsights>();
 		await chat.Chat("who is the chosen one?"); // IChatCompletionService logging is not full
 		//await chat.InvokePrompt("who is the chosen four?"); // Kernel's InvokePrompt seems to have more logs sent
+	}
+	
+	[Fact]
+	public async Task ChatCustomLogging()
+	{
+		var chat = ServiceProvider.GetRequiredService<SemKernelWithCustomLogger>();
+		await chat.StreamingChat("turn off the lights");
 	}
 }

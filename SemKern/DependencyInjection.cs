@@ -7,6 +7,7 @@ using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SemKern.Config;
+using SemKern.Logging;
 using SemKern.Services;
 
 namespace SemKern;
@@ -64,6 +65,8 @@ public static class DependencyInjection
 		
 		services.AddTransient<SemanticKernelService>();
 		services.AddTransient<SemKernelWithAppInsights>();
+		services.AddTransient<SemKernelWithCustomLogger>();
+		services.AddTransient<DumpLoggingProvider>();
 		
 		return services;
 	}
