@@ -1,5 +1,7 @@
 ﻿using Chat;
+using ContentSafety;
 using Language;
+using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -30,6 +32,7 @@ public class SandboxBase
 		
 		serviceCollection.AddChatServices(_config);
 		serviceCollection.AddLanguageServices(_config);
+		serviceCollection.AddContentSafetyServices(_config);
 		serviceCollection.AddSemanticKernelServices(_config);
 
 		return serviceCollection.BuildServiceProvider();

@@ -485,3 +485,6 @@ appsettings.*.json
 
 # rider
 .idea
+
+# http client environments
+*.env.json
