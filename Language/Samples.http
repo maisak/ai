@@ -1,0 +1,21 @@
+### POST entity linking
+# @name=AnalyzeText_EntityLinking
+POST {{languageEndpoint}}/language/:analyze-text?api-version=2024-11-01
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: {{languageApiKey}}
+
+{
+  "kind": "EntityLinking",
+  "parameters": {
+    "modelVersion": "latest"
+  },
+  "analysisInput": {
+    "documents": [
+      {
+        "id": "1",
+        "language": "en",
+        "text": "Microsoft was founded by Bill Gates and Paul Allen on April 4, 1975."
+      }
+    ]
+  }
+}

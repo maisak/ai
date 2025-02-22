@@ -12,8 +12,8 @@ public static class DependencyInjection
 	{
 		services.AddTransient<AzureAiServicesSettings>(_ => new AzureAiServicesSettings
 		{
-			Endpoint = config["AzureAiServicesSettings:Endpoint"]!,
-			ApiKey = config["AzureAiServicesSettings:ApiKey"]!
+			Endpoint = config["Language:Endpoint"]!,
+			ApiKey = config["Language:ApiKey"]!
 		});
 
 		services.AddTransient<LanguageService>();
