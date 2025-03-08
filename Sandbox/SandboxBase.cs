@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SemKern;
+using Speech;
 
 namespace Sandbox;
 
@@ -31,6 +32,7 @@ public class SandboxBase
 						.AddDebug());
 		
 		serviceCollection.AddChatServices(_config);
+		serviceCollection.AddSpeechServices(_config);
 		serviceCollection.AddLanguageServices(_config);
 		serviceCollection.AddContentSafetyServices(_config);
 		serviceCollection.AddSemanticKernelServices(_config);
