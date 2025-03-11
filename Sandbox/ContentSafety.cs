@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Sandbox;
 
-public class ContentSafety: SandboxBase
+public class ContentSafety : SandboxBase
 {
 	[Fact]
 	public async Task Text_NoBlacklist()

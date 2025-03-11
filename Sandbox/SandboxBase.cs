@@ -1,12 +1,12 @@
 ﻿using Chat;
 using ContentSafety;
 using Language;
-using Microsoft.Extensions.Azure;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SemKern;
 using Speech;
+using Translation;
 
 namespace Sandbox;
 
@@ -34,6 +34,7 @@ public class SandboxBase
 		serviceCollection.AddChatServices(_config);
 		serviceCollection.AddSpeechServices(_config);
 		serviceCollection.AddLanguageServices(_config);
+		serviceCollection.AddTranslationServices(_config);
 		serviceCollection.AddContentSafetyServices(_config);
 		serviceCollection.AddSemanticKernelServices(_config);
 

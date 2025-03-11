@@ -30,6 +30,7 @@
         <ProjectReference Include="..\Language\Language.csproj"/>
         <ProjectReference Include="..\SemKern\SemKern.csproj"/>
         <ProjectReference Include="..\Speech\Speech.csproj" />
+        <ProjectReference Include="..\Translation\Translation.csproj" />
     </ItemGroup>
 
     <ItemGroup>

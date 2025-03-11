@@ -1,0 +1,32 @@
+### POST language detection
+# @name=TranslatorService_DetectLanguage
+POST {{translateTextEndpoint}}/detect?api-version=3.0
+Content-Type: application/json
+Ocp-Apim-Subscription-Region: {{aiRegion}}
+Ocp-Apim-Subscription-Key: {{translateApiKey}}
+
+[
+  {"text": "Це ж було вже!"}
+]
+
+### POST language translation
+# @name=TranslatorService_TranslateText
+POST {{translateTextEndpoint}}/translate?api-version=3.0&from=uk&to=fr&to=en
+Content-Type: application/json
+Ocp-Apim-Subscription-Region: {{aiRegion}}
+Ocp-Apim-Subscription-Key: {{translateApiKey}}
+
+[
+  {"text": "Ви хотіли пошуткувать, але у вас не вийшло."}
+]
+
+### POST language transliteration
+# @name=TranslatorService_TransliterateText
+POST {{translateTextEndpoint}}/transliterate?api-version=3.0&from=ua&toScript=Latn
+Content-Type: application/json
+Ocp-Apim-Subscription-Region: {{aiRegion}}
+Ocp-Apim-Subscription-Key: {{translateApiKey}}
+
+[
+  {"text": "Слава Україні!"}
+]
