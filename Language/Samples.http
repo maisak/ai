@@ -19,3 +19,29 @@ Ocp-Apim-Subscription-Key: {{languageApiKey}}
     ]
   }
 }
+
+### POST language detection
+# @name=LanguageDetection
+POST {{languageEndpoint}}/language/:analyze-text?api-version=2024-11-01&showStats=true
+Content-Type: application/json
+Ocp-Apim-Subscription-Key: {{languageApiKey}}
+
+{
+  "kind": "LanguageDetection",
+  "parameters": {
+    "modelVersion": "latest"
+  },
+  "analysisInput":{
+    "documents":[
+      {
+        "id": "1",
+        "text": "Hello world",
+        "countryHint": "US"
+      },
+      {
+        "id": "2",
+        "text": "Bonjour tout le monde"
+      }
+    ]
+  }
+}
