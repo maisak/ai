@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -21,8 +22,9 @@ public class SemKernelWithAppInsights
 		FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
 	};
 	
-	public SemKernelWithAppInsights(OpenAiSettings settings, ILoggerFactory loggerFactory)
+	public SemKernelWithAppInsights(IOptions<OpenAiSettings> options, ILoggerFactory loggerFactory)
 	{
+		var settings = options.Value;
 		var builder = Kernel.CreateBuilder();
 		builder.Services.AddSingleton(loggerFactory);
 		builder.AddAzureOpenAIChatCompletion(settings.Model, settings.Endpoint, settings.ApiKey);

@@ -31,6 +31,8 @@ public class SandboxBase
 						.AddConsole()
 						.AddDebug());
 		
+		serviceCollection.AddSingleton(_config);
+		
 		serviceCollection.AddChatServices(_config);
 		serviceCollection.AddSpeechServices(_config);
 		serviceCollection.AddLanguageServices(_config);

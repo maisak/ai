@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -22,8 +23,9 @@ public class SemKernelWithCustomLogger
 		FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
 	};
 
-	public SemKernelWithCustomLogger(OpenAiSettings settings, DumpLoggingProvider loggingProvider)
+	public SemKernelWithCustomLogger(IOptions<OpenAiSettings> options, DumpLoggingProvider loggingProvider)
 	{
+		var settings = options.Value;
 		_loggingProvider = loggingProvider;
 		// Create a kernel with Azure OpenAI chat completion
 		var builder = Kernel.CreateBuilder()

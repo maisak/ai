@@ -1,4 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.SemanticKernel;
+using SemKern.Prompts;
 using SemKern.Services;
 
 namespace Sandbox;
@@ -44,5 +46,19 @@ public class SemKern : SandboxBase
 	{
 		var chat = ServiceProvider.GetRequiredService<SemKernelWithCustomLogger>();
 		await chat.StreamingChat("turn off the lights");
+	}
+	
+	[Fact]
+	public async Task BasicChatWithTestableKernelWrapper()
+	{
+		var kernel = ServiceProvider.GetRequiredService<Kernel>();
+		var promptRenderer = ServiceProvider.GetRequiredService<IPromptRenderer>();
+		var service = await TestableKernelWrapper.CreateAsync(kernel, promptRenderer);
+		var r1 = await service.Chat("hi");
+		var r2 = await service.Chat("what are you?");
+		var r3 = await service.Chat("what music do you specialize on?");
+		var r4 = await service.Chat("your opinion on doom metal?");
+		var r5 = await service.Chat("do you have any Pantera albums?");
+		var r6 = await service.Chat("I would like to buy Spice Girls cd");
 	}
 }

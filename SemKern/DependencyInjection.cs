@@ -2,12 +2,16 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Microsoft.SemanticKernel;
 using OpenTelemetry;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
 using SemKern.Config;
 using SemKern.Logging;
+using SemKern.Plugins;
+using SemKern.Prompts;
 using SemKern.Services;
 
 namespace SemKern;
@@ -16,12 +20,9 @@ public static class DependencyInjection
 {
 	public static IServiceCollection AddSemanticKernelServices(this IServiceCollection services, IConfiguration config)
 	{
-		services.AddTransient<OpenAiSettings>(_ => new OpenAiSettings
-		{
-			Endpoint = config["OpenAiSettings:Endpoint"]!,
-			ApiKey = config["OpenAiSettings:ApiKey"]!,
-			Model = config["OpenAiSettings:Model"]!
-		});
+		services.AddOptionsWithValidateOnStart<OpenAiSettings>()
+			.BindConfiguration(nameof(OpenAiSettings))
+			.ValidateDataAnnotations();
 		
 		services.AddTransient<ILoggerFactory>(_ =>
 		{
@@ -52,7 +53,7 @@ public static class DependencyInjection
 				builder.AddOpenTelemetry(options =>
 				{
 					options.SetResourceBuilder(resourceBuilder);
-					options.AddAzureMonitorLogExporter(options => options.ConnectionString = connectionString);
+					options.AddAzureMonitorLogExporter(opt => opt.ConnectionString = connectionString);
 					// Format log messages. This is default to false.
 					options.IncludeFormattedMessage = true;
 					options.IncludeScopes = true;
@@ -67,6 +68,18 @@ public static class DependencyInjection
 		services.AddTransient<SemKernelWithAppInsights>();
 		services.AddTransient<SemKernelWithCustomLogger>();
 		services.AddTransient<DumpLoggingProvider>();
+		services.AddTransient<IPromptRenderer, PromptRenderer>();
+
+		services.AddTransient<Kernel>(isp =>
+		{
+			var settings = isp.GetRequiredService<IOptions<OpenAiSettings>>().Value;
+			var builder = Kernel.CreateBuilder()
+				.AddAzureOpenAIChatCompletion(settings.Model, settings.Endpoint, settings.ApiKey);
+			builder.Plugins.AddFromType<LogPlugin>();
+			builder.Plugins.AddFromType<MusicPlugin>();
+			var kernel = builder.Build();
+			return kernel;
+		});
 		
 		return services;
 	}

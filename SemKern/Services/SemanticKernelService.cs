@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
@@ -19,8 +20,9 @@ public class SemanticKernelService
 		FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
 	};
 	
-	public SemanticKernelService(OpenAiSettings settings)
+	public SemanticKernelService(IOptions<OpenAiSettings> options)
 	{
+		var settings = options.Value;
 		// Create a kernel with Azure OpenAI chat completion
 		var builder = Kernel.CreateBuilder()
 			.AddAzureOpenAIChatCompletion(settings.Model, settings.Endpoint, settings.ApiKey);
