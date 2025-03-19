@@ -22,7 +22,7 @@
       <None Update="Prompts\system-template.yaml">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="Prompts\strategies.yaml">
+      <None Update="Prompts\strategies.prompt">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

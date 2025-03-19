@@ -2,6 +2,7 @@
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using SemKern.Prompts;
+using SemKern.Services.Models;
 
 namespace SemKern.Services;
 
@@ -13,7 +14,10 @@ public class TestableKernelWrapper
 
 	private readonly OpenAIPromptExecutionSettings _openAiPromptExecutionSettings = new()
 	{
-		FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
+		FunctionChoiceBehavior = FunctionChoiceBehavior.Auto(),
+#pragma warning disable SKEXP0010
+		ResponseFormat = typeof(ChatResponse)
+#pragma warning restore SKEXP0010
 	};
 
 	private TestableKernelWrapper(Kernel kernel, string systemPrompt)

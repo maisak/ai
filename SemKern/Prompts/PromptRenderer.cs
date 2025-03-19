@@ -8,7 +8,7 @@ public class PromptRenderer : IPromptRenderer
 	public async Task<string> RenderSystemPrompt(Kernel kernel, string name)
 	{
 		var template = await File.ReadAllTextAsync("./Prompts/system-template.yaml");
-		var strategies = await File.ReadAllTextAsync("./Prompts/strategies.yaml");
+		var strategies = await File.ReadAllTextAsync("./Prompts/strategies.prompt");
 		
 		var templateFactory = new HandlebarsPromptTemplateFactory();
 		var promptTemplateConfig = new PromptTemplateConfig
@@ -22,7 +22,7 @@ public class PromptRenderer : IPromptRenderer
 			.RenderAsync(kernel, new KernelArguments
 			{
 				{ "customerName", name },
-				{ "responseStrategy", strategies }
+				{ "responseStrategies", strategies }
 			});
 		
 		return promptTemplate;
