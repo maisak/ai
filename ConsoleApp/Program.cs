@@ -11,8 +11,17 @@ var serviceProvider = CreateServiceProvider(config);
 /* experimentation zone */
 
 var chat = serviceProvider.GetRequiredService<SemKernelWithAppInsights>();
-var response = await chat.InvokePrompt("random Megadeth album to listen to?");
-Console.WriteLine(response);
+
+// read user input and pass it to the chat service in a cycle
+while (true)
+{
+	Console.Write("You: ");
+	var input = Console.ReadLine();
+	if (string.IsNullOrWhiteSpace(input))
+		break;
+	var response = await chat.Chat(input);
+	Console.WriteLine("Bot: " + response);
+}
 
 /* end of experimentation zone */
 Console.ReadKey();

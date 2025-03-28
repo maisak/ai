@@ -5,7 +5,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using OpenTelemetry;
-using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -37,14 +36,14 @@ public static class DependencyInjection
 				.SetResourceBuilder(resourceBuilder)
 				.AddSource("Microsoft.SemanticKernel*")
 				.AddSource(nameof(SemKernelWithAppInsights))
-				.AddConsoleExporter()
+				//.AddConsoleExporter()
 				.AddAzureMonitorTraceExporter(options => options.ConnectionString = connectionString)
 				.Build();
 			var meterProvider = Sdk.CreateMeterProviderBuilder()
 				.SetResourceBuilder(resourceBuilder)
 				.AddMeter("Microsoft.SemanticKernel*")
 				.AddMeter(nameof(SemKernelWithAppInsights))
-				.AddConsoleExporter()
+				//.AddConsoleExporter()
 				.AddAzureMonitorMetricExporter(options => options.ConnectionString = connectionString)
 				.Build();
 			var loggerFactory = LoggerFactory.Create(builder =>
@@ -52,7 +51,7 @@ public static class DependencyInjection
 				builder.AddOpenTelemetry(options =>
 				{
 					options.SetResourceBuilder(resourceBuilder);
-					options.AddConsoleExporter();
+					//options.AddConsoleExporter();
 					options.AddAzureMonitorLogExporter(opt => opt.ConnectionString = connectionString);
 					options.IncludeFormattedMessage = true;
 					options.IncludeScopes = true;
