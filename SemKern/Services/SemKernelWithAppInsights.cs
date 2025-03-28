@@ -5,13 +5,10 @@ using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using SemKern.Config;
+using System.Diagnostics;
 
 namespace SemKern.Services;
 
-/// <summary>
-/// Does not work as expected yet with IChatCompletionService and Application Insights 
-/// https://learn.microsoft.com/en-us/semantic-kernel/concepts/enterprise-readiness/observability/telemetry-with-app-insights?tabs=Powershell&pivots=programming-language-csharp
-/// </summary>
 public class SemKernelWithAppInsights
 {
 	private readonly Kernel _kernel;
@@ -21,6 +18,7 @@ public class SemKernelWithAppInsights
 	{
 		FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()
 	};
+	private static readonly ActivitySource ActivitySource = new(nameof(SemKernelWithAppInsights));
 	
 	public SemKernelWithAppInsights(IOptions<OpenAiSettings> options, ILoggerFactory loggerFactory)
 	{
@@ -41,12 +39,12 @@ public class SemKernelWithAppInsights
 	
 	public async Task<string> Chat(string prompt)
 	{
+		using var activity = ActivitySource.StartActivity(); // 'using' makes sure the activity is stopped and disposed
 		_history.AddUserMessage(prompt);
 		var result = await _chatCompletionService.GetChatMessageContentAsync(
 			_history,
 			executionSettings: _openAiPromptExecutionSettings,
 			kernel: _kernel);
-		Console.WriteLine("Assistant > " + result);
 		_history.AddMessage(result.Role, result.Content ?? string.Empty);
 
 		return result.Content ?? string.Empty;

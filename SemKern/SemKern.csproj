@@ -16,6 +16,7 @@
         <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
         <PackageReference Include="Microsoft.SemanticKernel" />
         <PackageReference Include="Microsoft.SemanticKernel.PromptTemplates.Handlebars" />
+        <PackageReference Include="OpenTelemetry.Exporter.Console" />
     </ItemGroup>
 
     <ItemGroup>

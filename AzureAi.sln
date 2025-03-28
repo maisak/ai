@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Speech", "Speech\Speech.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Translation", "Translation\Translation.csproj", "{B726D92D-7C07-4A2C-B156-0F1E8105488F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleApp", "ConsoleApp\ConsoleApp.csproj", "{6A9A6595-F5EB-4523-A205-366DF610773D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,5 +67,9 @@ Global
 		{B726D92D-7C07-4A2C-B156-0F1E8105488F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B726D92D-7C07-4A2C-B156-0F1E8105488F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B726D92D-7C07-4A2C-B156-0F1E8105488F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A9A6595-F5EB-4523-A205-366DF610773D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A9A6595-F5EB-4523-A205-366DF610773D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A9A6595-F5EB-4523-A205-366DF610773D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A9A6595-F5EB-4523-A205-366DF610773D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

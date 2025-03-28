@@ -2,10 +2,11 @@
 using Microsoft.SemanticKernel;
 using SemKern.Prompts;
 using SemKern.Services;
+using Xunit.Abstractions;
 
 namespace Sandbox;
 
-public class SemKern : SandboxBase
+public class SemKern(ITestOutputHelper output) : SandboxBase
 {
 	[Fact]
 	public async Task BaseChat()
@@ -32,13 +33,9 @@ public class SemKern : SandboxBase
 	[Fact]
 	public async Task ChatLoggedToApplicationInsights()
 	{
-		/*
-		 * Logging for IChatCompletionService is not really working in the current version of the SDK.
-		 * Going to return to this later.
-		 */
 		var chat = ServiceProvider.GetRequiredService<SemKernelWithAppInsights>();
-		await chat.Chat("who is the chosen one?"); // IChatCompletionService logging is not full
-		//await chat.InvokePrompt("who is the chosen four?"); // Kernel's InvokePrompt seems to have more logs sent
+		var result = await chat.Chat("who is the chosen one?");
+		output.WriteLine(result);
 	}
 	
 	[Fact]

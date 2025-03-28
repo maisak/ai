@@ -5,6 +5,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.SemanticKernel;
 using OpenTelemetry;
+using OpenTelemetry.Logs;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
@@ -24,37 +25,35 @@ public static class DependencyInjection
 			.BindConfiguration(nameof(OpenAiSettings))
 			.ValidateDataAnnotations();
 		
-		services.AddTransient<ILoggerFactory>(_ =>
+		services.AddSingleton<ILoggerFactory>(_ =>
 		{
+			// not reliable in tests, but always works in console apps, etc
 			var connectionString = config.GetConnectionString("ApplicationInsights");
-
 			var resourceBuilder = ResourceBuilder
 				.CreateDefault()
 				.AddService("TelemetryApplicationInsightsQuickstart");
-		
-			// Enable model diagnostics with sensitive data.
 			AppContext.SetSwitch("Microsoft.SemanticKernel.Experimental.GenAI.EnableOTelDiagnosticsSensitive", true);
-		
-			using var traceProvider = Sdk.CreateTracerProviderBuilder()
+			var traceProvider = Sdk.CreateTracerProviderBuilder()
 				.SetResourceBuilder(resourceBuilder)
 				.AddSource("Microsoft.SemanticKernel*")
+				.AddSource(nameof(SemKernelWithAppInsights))
+				.AddConsoleExporter()
 				.AddAzureMonitorTraceExporter(options => options.ConnectionString = connectionString)
 				.Build();
-
-			using var meterProvider = Sdk.CreateMeterProviderBuilder()
+			var meterProvider = Sdk.CreateMeterProviderBuilder()
 				.SetResourceBuilder(resourceBuilder)
 				.AddMeter("Microsoft.SemanticKernel*")
+				.AddMeter(nameof(SemKernelWithAppInsights))
+				.AddConsoleExporter()
 				.AddAzureMonitorMetricExporter(options => options.ConnectionString = connectionString)
 				.Build();
-		
 			var loggerFactory = LoggerFactory.Create(builder =>
 			{
-				// Add OpenTelemetry as a logging provider
 				builder.AddOpenTelemetry(options =>
 				{
 					options.SetResourceBuilder(resourceBuilder);
+					options.AddConsoleExporter();
 					options.AddAzureMonitorLogExporter(opt => opt.ConnectionString = connectionString);
-					// Format log messages. This is default to false.
 					options.IncludeFormattedMessage = true;
 					options.IncludeScopes = true;
 				});
@@ -65,7 +64,7 @@ public static class DependencyInjection
 		});
 		
 		services.AddTransient<SemanticKernelService>();
-		services.AddTransient<SemKernelWithAppInsights>();
+		services.AddSingleton<SemKernelWithAppInsights>();
 		services.AddTransient<SemKernelWithCustomLogger>();
 		services.AddTransient<DumpLoggingProvider>();
 		services.AddTransient<IPromptRenderer, PromptRenderer>();
