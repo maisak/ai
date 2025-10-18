@@ -4,6 +4,7 @@ using Language;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Search;
 using SemKern;
 using Speech;
 using Translation;
@@ -35,6 +36,7 @@ public class SandboxBase
 		
 		serviceCollection.AddChatServices(_config);
 		serviceCollection.AddSpeechServices(_config);
+		serviceCollection.AddSearchServices(_config);
 		serviceCollection.AddLanguageServices(_config);
 		serviceCollection.AddTranslationServices(_config);
 		serviceCollection.AddContentSafetyServices(_config);

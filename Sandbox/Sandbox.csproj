@@ -30,6 +30,7 @@
         <ProjectReference Include="..\Chat\Chat.csproj"/>
         <ProjectReference Include="..\ContentSafety\ContentSafety.csproj" />
         <ProjectReference Include="..\Language\Language.csproj"/>
+        <ProjectReference Include="..\Search\Search.csproj" />
         <ProjectReference Include="..\SemKern\SemKern.csproj"/>
         <ProjectReference Include="..\Speech\Speech.csproj" />
         <ProjectReference Include="..\Translation\Translation.csproj" />
