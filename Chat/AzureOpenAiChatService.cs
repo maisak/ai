@@ -5,8 +5,16 @@ using OpenAI.Chat;
 
 namespace Chat;
 
-public class ChatService(ChatClient client)
+public class AzureOpenAiChatService(ChatClient client)
 {
+	private readonly List<ChatMessage> _history = [
+		new SystemChatMessage(
+			"""
+			You are impersonating Samuel L. Jackson, reply as he would do, sometimes impersonating
+			his famous roles.
+			""")
+	];
+	
 	public async Task ChatAsync()
 	{
 		ChatCompletion completion = await client.CompleteChatAsync(
@@ -32,5 +40,17 @@ public class ChatService(ChatClient client)
 		});
 		
 		Console.WriteLine(completion.Content[0].Text);
+	}
+	
+	public string Reply(string question)
+	{
+		_history.Add(new UserChatMessage(question));
+
+		var completion = client.CompleteChat(_history);
+		var reply = completion.Value.Content[0].Text;
+		
+		_history.Add(new AssistantChatMessage(reply));
+		
+		return reply;
 	}
 }

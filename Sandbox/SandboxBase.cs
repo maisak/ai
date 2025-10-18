@@ -34,7 +34,8 @@ public class SandboxBase
 		
 		serviceCollection.AddSingleton(_config);
 		
-		serviceCollection.AddChatServices(_config);
+		//serviceCollection.AddAzureOpenAiServices(_config);
+		serviceCollection.AddOpenAiServices(_config);
 		serviceCollection.AddSpeechServices(_config);
 		serviceCollection.AddSearchServices(_config);
 		serviceCollection.AddLanguageServices(_config);

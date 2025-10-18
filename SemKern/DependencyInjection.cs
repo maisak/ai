@@ -21,7 +21,7 @@ public static class DependencyInjection
 	public static IServiceCollection AddSemanticKernelServices(this IServiceCollection services, IConfiguration config)
 	{
 		services.AddOptionsWithValidateOnStart<OpenAiSettings>()
-			.BindConfiguration(nameof(OpenAiSettings))
+			.BindConfiguration($"Azure{nameof(OpenAiSettings)}")
 			.ValidateDataAnnotations();
 		
 		services.AddSingleton<ILoggerFactory>(_ =>
