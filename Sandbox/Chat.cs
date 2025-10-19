@@ -18,4 +18,11 @@ public class Chat : SandboxBase
 		var chat = ServiceProvider.GetRequiredService<OpenAiChatService>();
 		var reply = chat.Reply("Hi");
 	}
+
+	[Fact]
+	public async Task Generic_Chat() // using Microsoft.Extensions.AI
+	{
+		var chat = ServiceProvider.GetRequiredService<GenericChatService>();
+		var reply = await chat.Reply("Hi");
+	}
 }

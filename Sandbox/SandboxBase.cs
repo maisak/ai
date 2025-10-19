@@ -33,15 +33,15 @@ public class SandboxBase
 						.AddDebug());
 		
 		serviceCollection.AddSingleton(_config);
-		
-		//serviceCollection.AddAzureOpenAiServices(_config);
-		serviceCollection.AddOpenAiServices(_config);
+
 		serviceCollection.AddSpeechServices(_config);
 		serviceCollection.AddSearchServices(_config);
 		serviceCollection.AddLanguageServices(_config);
 		serviceCollection.AddTranslationServices(_config);
 		serviceCollection.AddContentSafetyServices(_config);
 		serviceCollection.AddSemanticKernelServices(_config);
+		serviceCollection.AddOpenAiServices(_config, "Gpt5Mini");
+		serviceCollection.AddGenericChatServices(_config, "Gpt5Mini");
 
 		return serviceCollection.BuildServiceProvider();
 	}

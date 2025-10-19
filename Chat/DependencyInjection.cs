@@ -1,7 +1,9 @@
 ﻿using Azure.AI.OpenAI;
 using Chat.Config;
+using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OpenAI.Chat;
 using System.ClientModel;
 
@@ -36,22 +38,69 @@ public static class DependencyInjection
 		return services;
 	}
 
-	public static IServiceCollection AddOpenAiServices(this IServiceCollection services, IConfiguration config)
+	public static IServiceCollection AddOpenAiServices(this IServiceCollection services, 
+													   IConfiguration config, 
+													   string model)
 	{
-		services.AddKeyedTransient<OpenAiSettings>("Gpt5Mini",
-			(_, _) => new OpenAiSettings
-			{
-				ApiKey = config[$"{nameof(OpenAiSettings)}:Gpt5Mini:ApiKey"]!,
-				Model = config[$"{nameof(OpenAiSettings)}:Gpt5Mini:Model"]!	
-			});
+		RegisterOpenAiSettings(services, config, model);
 		
 		services.AddTransient<OpenAiChatService>(sp =>
 		{
-			var settings = sp.GetRequiredKeyedService<OpenAiSettings>("Gpt5Mini");
+			var settings = sp.GetRequiredKeyedService<OpenAiSettings>(model);
 			var client = new ChatClient(settings.Model, settings.ApiKey);
 			return new OpenAiChatService(client);
 		});
 
 		return services;
+	}
+
+	/// <summary>
+	/// Do LLM talking via Microsoft.Extensions.AI packages
+	/// </summary>
+	/// <param name="services"></param>
+	/// <param name="config"></param>
+	/// <param name="model"></param>
+	/// <returns></returns>
+	public static IServiceCollection AddGenericChatServices(this IServiceCollection services, 
+															IConfiguration config,
+															string model)
+	{
+		RegisterOpenAiSettings(services, config, model);
+		
+		services.AddTransient<GenericChatService>();
+		services.AddTransient<IChatClient>(sp =>
+		{
+			var settings = sp.GetRequiredKeyedService<OpenAiSettings>(model);
+			var client = new ChatClient(settings.Model, settings.ApiKey).AsIChatClient();
+			return new ChatClientBuilder(client)
+				.UseFunctionInvocation()
+				.Build(sp);
+		});
+
+		services.AddTransient<ChatOptions>(sp =>
+		{
+			var settings = sp.GetRequiredKeyedService<OpenAiSettings>(model);
+			return new ChatOptions
+			{
+				ModelId = settings.Model,
+				Temperature = 1,
+				MaxOutputTokens = 5000
+			};
+		});
+		
+		return services;
+	}
+
+	private static void RegisterOpenAiSettings(IServiceCollection services, IConfiguration config, string model)
+	{
+		if (services.All(sd => sd.ServiceType != typeof(OpenAiSettings) || sd.ServiceKey?.ToString() != model))
+		{
+			services.AddKeyedTransient<OpenAiSettings>(model,
+				(_, _) => new OpenAiSettings
+				{
+					ApiKey = config[$"{nameof(OpenAiSettings)}:{model}:ApiKey"]!,
+					Model = config[$"{nameof(OpenAiSettings)}:{model}:Model"]!	
+				});
+		}
 	}
 }
