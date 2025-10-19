@@ -1,16 +1,18 @@
-﻿using ConsoleApp;
+﻿using Chat;
+using Chat.Config;
+using Chat.Tools;
+using ConsoleApp;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using SemKern;
-using SemKern.Services;
 
 var config = Configuration.InitConfiguration();
 var serviceProvider = CreateServiceProvider(config);
 
 /* experimentation zone */
 
-var chat = serviceProvider.GetRequiredService<SemKernelWithAppInsights>();
+var chat = serviceProvider.GetRequiredService<GenericChatService>();
 
 // read user input and pass it to the chat service in a cycle
 while (true)
@@ -19,8 +21,10 @@ while (true)
 	var input = Console.ReadLine();
 	if (string.IsNullOrWhiteSpace(input))
 		break;
-	var response = await chat.Chat(input);
+	Console.ForegroundColor = ConsoleColor.Yellow;
+	var response = await chat.Reply(input);
 	Console.WriteLine("Bot: " + response);
+	Console.ResetColor();
 }
 
 /* end of experimentation zone */
@@ -35,7 +39,12 @@ IServiceProvider CreateServiceProvider(IConfiguration configuration)
 				builder
 					.ClearProviders()
 					.AddConsole());
-		
+	
+	serviceCollection
+		.AddGenericChatServices(configuration, "Gpt5Mini")
+		.WithTool<DiceRoller>()
+		.Build();
+	
 	serviceCollection.AddSingleton(configuration);
 	serviceCollection.AddSemanticKernelServices(configuration);
 

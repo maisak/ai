@@ -14,6 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Chat\Chat.csproj" />
       <ProjectReference Include="..\SemKern\SemKern.csproj" />
     </ItemGroup>
 

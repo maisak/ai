@@ -1,9 +1,7 @@
 ﻿using Azure.AI.OpenAI;
 using Chat.Config;
-using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using OpenAI.Chat;
 using System.ClientModel;
 
@@ -51,43 +49,6 @@ public static class DependencyInjection
 			return new OpenAiChatService(client);
 		});
 
-		return services;
-	}
-
-	/// <summary>
-	/// Do LLM talking via Microsoft.Extensions.AI packages
-	/// </summary>
-	/// <param name="services"></param>
-	/// <param name="config"></param>
-	/// <param name="model"></param>
-	/// <returns></returns>
-	public static IServiceCollection AddGenericChatServices(this IServiceCollection services, 
-															IConfiguration config,
-															string model)
-	{
-		RegisterOpenAiSettings(services, config, model);
-		
-		services.AddTransient<GenericChatService>();
-		services.AddTransient<IChatClient>(sp =>
-		{
-			var settings = sp.GetRequiredKeyedService<OpenAiSettings>(model);
-			var client = new ChatClient(settings.Model, settings.ApiKey).AsIChatClient();
-			return new ChatClientBuilder(client)
-				.UseFunctionInvocation()
-				.Build(sp);
-		});
-
-		services.AddTransient<ChatOptions>(sp =>
-		{
-			var settings = sp.GetRequiredKeyedService<OpenAiSettings>(model);
-			return new ChatOptions
-			{
-				ModelId = settings.Model,
-				Temperature = 1,
-				MaxOutputTokens = 5000
-			};
-		});
-		
 		return services;
 	}
 
